@@ -20,6 +20,8 @@
 
 + (NSData *)HVD_sendSynchronousRequest:(NSURLRequest *)request returningResponse:(NSURLResponse *__autoreleasing *)response error:(NSError *__autoreleasing *)error;
 
++ (void)HVD_sendAsynchronousRequest:(NSURLRequest *)request queue:(NSOperationQueue *)queue completionHandler:(void (^)(NSURLResponse *, NSData *, NSError *))handler;
+
 - (id)HVD_initWithRequest:(NSURLRequest *)request delegate:(id <NSURLConnectionDelegate>)delegate;
 
 - (id)HVD_initWithRequest:(NSURLRequest *)request delegate:(id)delegate startImmediately:(BOOL)startImmediately;

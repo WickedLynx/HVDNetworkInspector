@@ -45,6 +45,8 @@ static HVDNetworkInspector *SharedInspector = nil;
         [self exchangeInstanceMethod:@selector(HVD_initWithRequest:delegate:startImmediately:) withMethod:@selector(initWithRequest:delegate:startImmediately:) forClass:[NSURLConnection class]];
 
         [self exchangeClassMethod:@selector(HVD_sendSynchronousRequest:returningResponse:error:) withMethod:@selector(sendSynchronousRequest:returningResponse:error:) forClass:[NSURLConnection class]];
+        
+        [self exchangeClassMethod:@selector(HVD_sendAsynchronousRequest:queue:completionHandler:) withMethod:@selector(sendAsynchronousRequest:queue:completionHandler:) forClass:[NSURLConnection class]];
 
     });
 

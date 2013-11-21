@@ -74,6 +74,22 @@ char const *CNIOriginalDelegateKey = "CNIOriginalDelegateKey";
     return data;
 }
 
++ (void)HVD_sendAsynchronousRequest:(NSURLRequest *)request queue:(NSOperationQueue *)queue completionHandler:(void (^)(NSURLResponse *, NSData *, NSError *))handler {
+    
+    [HVDNetworkInspector logStartDate:[NSDate date] forRequest:request];
+    
+    [self HVD_sendAsynchronousRequest:request queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+        
+        [HVDNetworkInspector logEndDate:[NSDate date] forRequest:request];
+        
+        [queue addOperationWithBlock:^{
+            
+            handler(response, data, error);
+            
+        }];
+    }];
+}
+
 - (id)HVD_initWithRequest:(NSURLRequest *)request delegate:(id<NSURLConnectionDelegate>)delegate {
 
     [self HVD_setDelegate:delegate];
@@ -88,6 +104,8 @@ char const *CNIOriginalDelegateKey = "CNIOriginalDelegateKey";
     return [self HVD_initWithRequest:request delegate:[HVDNetworkInspectorDelegateReplacement delegateForConnection:self] startImmediately:startImmediately];
     
 }
+
+#pragma mark Protocol checks
 
 - (BOOL)HVD_conformsToProtocol:(Protocol *)aProtocol {
     return [[self HVD_delegate] conformsToProtocol:aProtocol];
