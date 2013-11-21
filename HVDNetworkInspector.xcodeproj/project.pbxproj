@@ -1,0 +1,458 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		FAE75F9F183E1350003F74F7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAE75F9E183E1350003F74F7 /* Foundation.framework */; };
+		FAE75FA4183E1350003F74F7 /* HVDNetworkInspector.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAE75FA3183E1350003F74F7 /* HVDNetworkInspector.h */; };
+		FAE75FA6183E1350003F74F7 /* HVDNetworkInspector.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE75FA5183E1350003F74F7 /* HVDNetworkInspector.m */; };
+		FAE75FAD183E1350003F74F7 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAE75FAC183E1350003F74F7 /* XCTest.framework */; };
+		FAE75FAE183E1350003F74F7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAE75F9E183E1350003F74F7 /* Foundation.framework */; };
+		FAE75FB0183E1350003F74F7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAE75FAF183E1350003F74F7 /* UIKit.framework */; };
+		FAE75FB3183E1350003F74F7 /* libHVDNetworkInspector.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FAE75F9B183E1350003F74F7 /* libHVDNetworkInspector.a */; };
+		FAE75FB9183E1350003F74F7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FAE75FB7183E1350003F74F7 /* InfoPlist.strings */; };
+		FAE75FBB183E1350003F74F7 /* HVDNetworkInspectorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE75FBA183E1350003F74F7 /* HVDNetworkInspectorTests.m */; };
+		FAE75FCC183E13F0003F74F7 /* HVDNetworkConnectionLog.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE75FC5183E13F0003F74F7 /* HVDNetworkConnectionLog.m */; };
+		FAE75FCD183E13F0003F74F7 /* HVDNetworkInspectorReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE75FC7183E13F0003F74F7 /* HVDNetworkInspectorReportViewController.m */; };
+		FAE75FCF183E13F0003F74F7 /* NSURLConnection+HVDNetworkInspector.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE75FCB183E13F0003F74F7 /* NSURLConnection+HVDNetworkInspector.m */; };
+		FAE75FE9183E1736003F74F7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAE75FE8183E1736003F74F7 /* UIKit.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		FAE75FB1183E1350003F74F7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FAE75F93183E1350003F74F7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FAE75F9A183E1350003F74F7;
+			remoteInfo = HVDNetworkInspector;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		FAE75F99183E1350003F74F7 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+				FAE75FA4183E1350003F74F7 /* HVDNetworkInspector.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		FAE75F9B183E1350003F74F7 /* libHVDNetworkInspector.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libHVDNetworkInspector.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		FAE75F9E183E1350003F74F7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		FAE75FA2183E1350003F74F7 /* HVDNetworkInspector-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HVDNetworkInspector-Prefix.pch"; sourceTree = "<group>"; };
+		FAE75FA3183E1350003F74F7 /* HVDNetworkInspector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HVDNetworkInspector.h; sourceTree = "<group>"; };
+		FAE75FA5183E1350003F74F7 /* HVDNetworkInspector.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HVDNetworkInspector.m; sourceTree = "<group>"; };
+		FAE75FAB183E1350003F74F7 /* HVDNetworkInspectorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HVDNetworkInspectorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FAE75FAC183E1350003F74F7 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		FAE75FAF183E1350003F74F7 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		FAE75FB6183E1350003F74F7 /* HVDNetworkInspectorTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HVDNetworkInspectorTests-Info.plist"; sourceTree = "<group>"; };
+		FAE75FB8183E1350003F74F7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		FAE75FBA183E1350003F74F7 /* HVDNetworkInspectorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HVDNetworkInspectorTests.m; sourceTree = "<group>"; };
+		FAE75FC4183E13F0003F74F7 /* HVDNetworkConnectionLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HVDNetworkConnectionLog.h; sourceTree = "<group>"; };
+		FAE75FC5183E13F0003F74F7 /* HVDNetworkConnectionLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HVDNetworkConnectionLog.m; sourceTree = "<group>"; };
+		FAE75FC6183E13F0003F74F7 /* HVDNetworkInspectorReportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HVDNetworkInspectorReportViewController.h; sourceTree = "<group>"; };
+		FAE75FC7183E13F0003F74F7 /* HVDNetworkInspectorReportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HVDNetworkInspectorReportViewController.m; sourceTree = "<group>"; };
+		FAE75FCA183E13F0003F74F7 /* NSURLConnection+HVDNetworkInspector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLConnection+HVDNetworkInspector.h"; sourceTree = "<group>"; };
+		FAE75FCB183E13F0003F74F7 /* NSURLConnection+HVDNetworkInspector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLConnection+HVDNetworkInspector.m"; sourceTree = "<group>"; };
+		FAE75FE8183E1736003F74F7 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FAE75F98183E1350003F74F7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FAE75FE9183E1736003F74F7 /* UIKit.framework in Frameworks */,
+				FAE75F9F183E1350003F74F7 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FAE75FA8183E1350003F74F7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FAE75FAD183E1350003F74F7 /* XCTest.framework in Frameworks */,
+				FAE75FB3183E1350003F74F7 /* libHVDNetworkInspector.a in Frameworks */,
+				FAE75FB0183E1350003F74F7 /* UIKit.framework in Frameworks */,
+				FAE75FAE183E1350003F74F7 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		FAE75F92183E1350003F74F7 = {
+			isa = PBXGroup;
+			children = (
+				FAE75FA0183E1350003F74F7 /* HVDNetworkInspector */,
+				FAE75FB4183E1350003F74F7 /* HVDNetworkInspectorTests */,
+				FAE75F9D183E1350003F74F7 /* Frameworks */,
+				FAE75F9C183E1350003F74F7 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		FAE75F9C183E1350003F74F7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FAE75F9B183E1350003F74F7 /* libHVDNetworkInspector.a */,
+				FAE75FAB183E1350003F74F7 /* HVDNetworkInspectorTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FAE75F9D183E1350003F74F7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FAE75FE8183E1736003F74F7 /* UIKit.framework */,
+				FAE75F9E183E1350003F74F7 /* Foundation.framework */,
+				FAE75FAC183E1350003F74F7 /* XCTest.framework */,
+				FAE75FAF183E1350003F74F7 /* UIKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FAE75FA0183E1350003F74F7 /* HVDNetworkInspector */ = {
+			isa = PBXGroup;
+			children = (
+				FAE75FC4183E13F0003F74F7 /* HVDNetworkConnectionLog.h */,
+				FAE75FC5183E13F0003F74F7 /* HVDNetworkConnectionLog.m */,
+				FAE75FC6183E13F0003F74F7 /* HVDNetworkInspectorReportViewController.h */,
+				FAE75FC7183E13F0003F74F7 /* HVDNetworkInspectorReportViewController.m */,
+				FAE75FCA183E13F0003F74F7 /* NSURLConnection+HVDNetworkInspector.h */,
+				FAE75FCB183E13F0003F74F7 /* NSURLConnection+HVDNetworkInspector.m */,
+				FAE75FA3183E1350003F74F7 /* HVDNetworkInspector.h */,
+				FAE75FA5183E1350003F74F7 /* HVDNetworkInspector.m */,
+				FAE75FA1183E1350003F74F7 /* Supporting Files */,
+			);
+			path = HVDNetworkInspector;
+			sourceTree = "<group>";
+		};
+		FAE75FA1183E1350003F74F7 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				FAE75FA2183E1350003F74F7 /* HVDNetworkInspector-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		FAE75FB4183E1350003F74F7 /* HVDNetworkInspectorTests */ = {
+			isa = PBXGroup;
+			children = (
+				FAE75FBA183E1350003F74F7 /* HVDNetworkInspectorTests.m */,
+				FAE75FB5183E1350003F74F7 /* Supporting Files */,
+			);
+			path = HVDNetworkInspectorTests;
+			sourceTree = "<group>";
+		};
+		FAE75FB5183E1350003F74F7 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				FAE75FB6183E1350003F74F7 /* HVDNetworkInspectorTests-Info.plist */,
+				FAE75FB7183E1350003F74F7 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FAE75F9A183E1350003F74F7 /* HVDNetworkInspector */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FAE75FBE183E1350003F74F7 /* Build configuration list for PBXNativeTarget "HVDNetworkInspector" */;
+			buildPhases = (
+				FAE75F97183E1350003F74F7 /* Sources */,
+				FAE75F98183E1350003F74F7 /* Frameworks */,
+				FAE75F99183E1350003F74F7 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HVDNetworkInspector;
+			productName = HVDNetworkInspector;
+			productReference = FAE75F9B183E1350003F74F7 /* libHVDNetworkInspector.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		FAE75FAA183E1350003F74F7 /* HVDNetworkInspectorTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FAE75FC1183E1350003F74F7 /* Build configuration list for PBXNativeTarget "HVDNetworkInspectorTests" */;
+			buildPhases = (
+				FAE75FA7183E1350003F74F7 /* Sources */,
+				FAE75FA8183E1350003F74F7 /* Frameworks */,
+				FAE75FA9183E1350003F74F7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FAE75FB2183E1350003F74F7 /* PBXTargetDependency */,
+			);
+			name = HVDNetworkInspectorTests;
+			productName = HVDNetworkInspectorTests;
+			productReference = FAE75FAB183E1350003F74F7 /* HVDNetworkInspectorTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FAE75F93183E1350003F74F7 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0500;
+				ORGANIZATIONNAME = LBS;
+			};
+			buildConfigurationList = FAE75F96183E1350003F74F7 /* Build configuration list for PBXProject "HVDNetworkInspector" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = FAE75F92183E1350003F74F7;
+			productRefGroup = FAE75F9C183E1350003F74F7 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FAE75F9A183E1350003F74F7 /* HVDNetworkInspector */,
+				FAE75FAA183E1350003F74F7 /* HVDNetworkInspectorTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		FAE75FA9183E1350003F74F7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FAE75FB9183E1350003F74F7 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		FAE75F97183E1350003F74F7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FAE75FCC183E13F0003F74F7 /* HVDNetworkConnectionLog.m in Sources */,
+				FAE75FCD183E13F0003F74F7 /* HVDNetworkInspectorReportViewController.m in Sources */,
+				FAE75FCF183E13F0003F74F7 /* NSURLConnection+HVDNetworkInspector.m in Sources */,
+				FAE75FA6183E1350003F74F7 /* HVDNetworkInspector.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FAE75FA7183E1350003F74F7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FAE75FBB183E1350003F74F7 /* HVDNetworkInspectorTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FAE75FB2183E1350003F74F7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FAE75F9A183E1350003F74F7 /* HVDNetworkInspector */;
+			targetProxy = FAE75FB1183E1350003F74F7 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		FAE75FB7183E1350003F74F7 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FAE75FB8183E1350003F74F7 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		FAE75FBC183E1350003F74F7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		FAE75FBD183E1350003F74F7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		FAE75FBF183E1350003F74F7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					"$(ARCHS_STANDARD_INCLUDING_64_BIT)",
+					i386,
+				);
+				DSTROOT = /tmp/HVDNetworkInspector.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "HVDNetworkInspector/HVDNetworkInspector-Prefix.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				VALID_ARCHS = "arm64 armv7 armv7s i386";
+			};
+			name = Debug;
+		};
+		FAE75FC0183E1350003F74F7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					"$(ARCHS_STANDARD_INCLUDING_64_BIT)",
+					i386,
+				);
+				DSTROOT = /tmp/HVDNetworkInspector.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "HVDNetworkInspector/HVDNetworkInspector-Prefix.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				VALID_ARCHS = "arm64 armv7 armv7s i386";
+			};
+			name = Release;
+		};
+		FAE75FC2183E1350003F74F7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "HVDNetworkInspector/HVDNetworkInspector-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "HVDNetworkInspectorTests/HVDNetworkInspectorTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		FAE75FC3183E1350003F74F7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "HVDNetworkInspector/HVDNetworkInspector-Prefix.pch";
+				INFOPLIST_FILE = "HVDNetworkInspectorTests/HVDNetworkInspectorTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		FAE75F96183E1350003F74F7 /* Build configuration list for PBXProject "HVDNetworkInspector" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FAE75FBC183E1350003F74F7 /* Debug */,
+				FAE75FBD183E1350003F74F7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FAE75FBE183E1350003F74F7 /* Build configuration list for PBXNativeTarget "HVDNetworkInspector" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FAE75FBF183E1350003F74F7 /* Debug */,
+				FAE75FC0183E1350003F74F7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FAE75FC1183E1350003F74F7 /* Build configuration list for PBXNativeTarget "HVDNetworkInspectorTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FAE75FC2183E1350003F74F7 /* Debug */,
+				FAE75FC3183E1350003F74F7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = FAE75F93183E1350003F74F7 /* Project object */;
+}
