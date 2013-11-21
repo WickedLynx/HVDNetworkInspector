@@ -10,29 +10,11 @@
 #import "HVDNetworkInspector.h"
 #import <objc/runtime.h>
 
-@interface NSURLConnection (HVDNetworkInspector_Private_Messaging)
+@interface HVDNetworkInspector (Private_Logging)
 
-- (void)HVD_receivedMessage:(SEL)message withArguments:(NSArray *)arguments;
++ (void)logStartDate:(NSDate *)date forRequest:(NSURLRequest *)request;
 
-- (BOOL)HVD_connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace;
-
-- (BOOL)HVD_connectionShouldUseCredentialStorage:(NSURLConnection *)connection;
-
-- (void)HVD_connection:(NSURLConnection *)connection didSendBodyData:(NSInteger)bytesWritten totalBytesWritten:(NSInteger)totalBytesWritten totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite;
-
-- (NSURLRequest *)HVD_connection:(NSURLConnection *)connection willSendRequest:(NSURLRequest *)request redirectResponse:(NSURLResponse *)redirectResponse;
-
-- (NSInputStream *)HVD_connection:(NSURLConnection *)connection needNewBodyStream:(NSURLRequest *)request;
-
-- (NSCachedURLResponse *)HVD_connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse;
-
-- (void)HVD_connectionDidResumeDownloading:(NSURLConnection *)connection totalBytesWritten:(long long)totalBytesWritten expectedTotalBytes:(long long)expectedTotalBytes;
-
-- (void)HVD_connection:(NSURLConnection *)connection didWriteData:(long long)bytesWritten totalBytesWritten:(long long)totalBytesWritten expectedTotalBytes:(long long)expectedTotalBytes;
-
-- (BOOL)HVD_delegateRespondsToSelector:(SEL)aSelector;
-
-- (void)HVD_setDelegate:(id)delegate;
++ (void)logEndDate:(NSDate *)date forRequest:(NSURLRequest *)request;
 
 @end
 
@@ -59,91 +41,22 @@
 
 - (BOOL)respondsToSelector:(SEL)aSelector {
 
-    if ([NSStringFromSelector(aSelector) isEqualToString:NSStringFromSelector(@selector(connectionDidFinishLoading:))]) {
-        return YES;
-    }
-
-    return [_connection HVD_delegateRespondsToSelector:aSelector];
+    return [_connection HVD_respondsToSelector:aSelector];
 }
 
-
-#pragma mark - NSURLConnectionDelegate methods
-
-- (void)connection:(NSURLConnection *)connection willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
-
-    [_connection HVD_receivedMessage:@selector(connection:willSendRequestForAuthenticationChallenge:) withArguments:@[connection, challenge]];
+- (BOOL)conformsToProtocol:(Protocol *)aProtocol {
+    return [_connection HVD_conformsToProtocol:aProtocol];
 }
 
-- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace {
-    return [_connection HVD_connection:connection canAuthenticateAgainstProtectionSpace:protectionSpace];
+- (void)forwardInvocation:(NSInvocation *)anInvocation {
+    [anInvocation setTarget:_connection];
+    [anInvocation invoke];
 }
 
-- (void)connection:(NSURLConnection *)connection didCancelAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
-    [_connection HVD_receivedMessage:@selector(connection:didCancelAuthenticationChallenge:) withArguments:@[connection, challenge]];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
-    [_connection HVD_receivedMessage:@selector(connection:didReceiveAuthenticationChallenge:) withArguments:@[connection, challenge]];
-}
-
-- (BOOL)connectionShouldUseCredentialStorage:(NSURLConnection *)connection {
-    return [_connection HVD_connectionShouldUseCredentialStorage:connection];
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    [HVDNetworkInspector logEndDate:[NSDate date] forRequest:[_connection originalRequest]];
-
-    [_connection HVD_receivedMessage:@selector(connection:didFailWithError:) withArguments:@[connection, error]];
-}
-
-#pragma mark - NSURLConnectionDataDelegate methods
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-    [_connection HVD_receivedMessage:@selector(connection:didReceiveResponse:) withArguments:@[connection, response]];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-    [_connection HVD_receivedMessage:@selector(connection:didReceiveData:) withArguments:@[connection, data]];
-}
-
-- (void)connection:(NSURLConnection *)connection didSendBodyData:(NSInteger)bytesWritten totalBytesWritten:(NSInteger)totalBytesWritten totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite {
-    [_connection HVD_connection:connection didSendBodyData:bytesWritten totalBytesWritten:totalBytesWritten totalBytesExpectedToWrite:totalBytesExpectedToWrite];
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    [HVDNetworkInspector logEndDate:[NSDate date] forRequest:[_connection originalRequest]];
-
-    [_connection HVD_receivedMessage:@selector(connectionDidFinishLoading:) withArguments:@[connection]];
-}
-
-- (NSURLRequest *)connection:(NSURLConnection *)connection willSendRequest:(NSURLRequest *)request redirectResponse:(NSURLResponse *)redirectResponse {
-    return [_connection HVD_connection:connection willSendRequest:request redirectResponse:redirectResponse];
-}
-
-- (NSInputStream *)connection:(NSURLConnection *)connection needNewBodyStream:(NSURLRequest *)request; {
-    return [_connection HVD_connection:connection needNewBodyStream:request];
-}
-
-- (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse {
-    return [_connection HVD_connection:connection willCacheResponse:cachedResponse];
-}
-
-#pragma mark - NSURLConnectionDownloadDelegate methods
-
-- (void)connectionDidFinishDownloading:(NSURLConnection *)connection destinationURL:(NSURL *)destinationURL {
-    [HVDNetworkInspector logEndDate:[NSDate date] forRequest:[_connection originalRequest]];
-    [_connection HVD_receivedMessage:@selector(connectionDidFinishDownloading:destinationURL:) withArguments:@[connection, destinationURL]];
-}
-
-- (void)connectionDidResumeDownloading:(NSURLConnection *)connection totalBytesWritten:(long long)totalBytesWritten expectedTotalBytes:(long long)expectedTotalBytes {
-    [_connection HVD_connectionDidResumeDownloading:connection totalBytesWritten:totalBytesWritten expectedTotalBytes:expectedTotalBytes];
-}
-
-- (void)connection:(NSURLConnection *)connection didWriteData:(long long)bytesWritten totalBytesWritten:(long long)totalBytesWritten expectedTotalBytes:(long long)expectedTotalBytes {
-    [_connection HVD_connection:connection didWriteData:bytesWritten totalBytesWritten:totalBytesWritten expectedTotalBytes:expectedTotalBytes];
-}
 
 @end
+
+
 
 char const *CNIOriginalDelegateKey = "CNIOriginalDelegateKey";
 
@@ -165,20 +78,24 @@ char const *CNIOriginalDelegateKey = "CNIOriginalDelegateKey";
 
     [self HVD_setDelegate:delegate];
 
-    HVDNetworkInspectorDelegateReplacement *replacementDelegate = [HVDNetworkInspectorDelegateReplacement delegateForConnection:self];
-
-    return [self HVD_initWithRequest:request delegate:replacementDelegate];
+    return [self HVD_initWithRequest:request delegate:[HVDNetworkInspectorDelegateReplacement delegateForConnection:self]];
 }
 
 - (id)HVD_initWithRequest:(NSURLRequest *)request delegate:(id)delegate startImmediately:(BOOL)startImmediately {
 
     [self HVD_setDelegate:delegate];
 
-    HVDNetworkInspectorDelegateReplacement *replacementDelegate = [HVDNetworkInspectorDelegateReplacement delegateForConnection:self];
-
-    return [self HVD_initWithRequest:request delegate:replacementDelegate startImmediately:startImmediately];
+    return [self HVD_initWithRequest:request delegate:[HVDNetworkInspectorDelegateReplacement delegateForConnection:self] startImmediately:startImmediately];
+    
 }
 
+- (BOOL)HVD_conformsToProtocol:(Protocol *)aProtocol {
+    return [[self HVD_delegate] conformsToProtocol:aProtocol];
+}
+
+- (BOOL)HVD_respondsToSelector:(SEL)aSelector {
+    return [self HVD_delegateRespondsToSelector:aSelector];
+}
 
 
 #pragma mark - Delegate management
@@ -190,6 +107,7 @@ char const *CNIOriginalDelegateKey = "CNIOriginalDelegateKey";
 - (void)HVD_setDelegate:(id)delegate {
     objc_setAssociatedObject(self, CNIOriginalDelegateKey, delegate, OBJC_ASSOCIATION_ASSIGN);
 }
+
 
 - (BOOL)HVD_delegateRespondsToSelector:(SEL)aSelector {
     return [[self HVD_delegate] respondsToSelector:aSelector];
@@ -203,104 +121,123 @@ char const *CNIOriginalDelegateKey = "CNIOriginalDelegateKey";
     [self HVD_start];
 }
 
+#pragma mark - NSURLConnectionDelegate methods
 
-#pragma mark - Common method forwarding
-
-- (void)HVD_receivedMessage:(SEL)message withArguments:(NSArray *)arguments {
-
-    id originalDelegate = [self HVD_delegate];
-
-    if ([originalDelegate respondsToSelector:message]) {
-
-        if (arguments == nil) {
-
-            [originalDelegate performSelector:message];
-
-        } else {
-
-            Method method = class_getInstanceMethod([originalDelegate class], message);
-
-            NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[NSMethodSignature signatureWithObjCTypes:method_getTypeEncoding(method)]];
-            [invocation setSelector:message];
-            [invocation setTarget:originalDelegate];
-
-            for (int argumentIndex = 0; argumentIndex != arguments.count; ++argumentIndex) {
-
-                [invocation setArgument:(__bridge void *)(arguments[argumentIndex]) atIndex:(argumentIndex + 2)];
-            }
-
-            [invocation invoke];
-        }
-
+- (void)connection:(NSURLConnection *)connection willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
+    if ([self HVD_delegateRespondsToSelector:@selector(connection:willSendRequestForAuthenticationChallenge:)]) {
+        [[self HVD_delegate] connection:connection willSendRequestForAuthenticationChallenge:challenge];
     }
-
 }
 
-#pragma mark - NSURLConnectionDelegate forwarded methods
-
-- (BOOL)HVD_connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace {
-
-    if ([[self HVD_delegate] respondsToSelector:@selector(connection:canAuthenticateAgainstProtectionSpace:)]) {
+- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace {
+    if ([self HVD_delegateRespondsToSelector:@selector(connection:canAuthenticateAgainstProtectionSpace:)]) {
         return [[self HVD_delegate] connection:connection canAuthenticateAgainstProtectionSpace:protectionSpace];
     }
-
+    
     return NO;
 }
 
-- (BOOL)HVD_connectionShouldUseCredentialStorage:(NSURLConnection *)connection {
-
-    if ([[self HVD_delegate] respondsToSelector:@selector(connectionShouldUseCredentialStorage:)]) {
-        return [[self HVD_delegate] connectionShouldUseCredentialStorage:connection];
+- (void)connection:(NSURLConnection *)connection didCancelAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
+    if ([self HVD_delegateRespondsToSelector:@selector(connection:didCancelAuthenticationChallenge:)]) {
+        [[self HVD_delegate] connection:connection didCancelAuthenticationChallenge:challenge];
     }
-
-    return YES;
 }
 
-#pragma mark - NSURLConnectionDataDelegate forwarded methods
+- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
+    if ([self HVD_delegateRespondsToSelector:@selector(connection:didReceiveAuthenticationChallenge:)]) {
+        [[self HVD_delegate] connection:connection didReceiveAuthenticationChallenge:challenge];
+    }
+}
 
-- (void)HVD_connection:(NSURLConnection *)connection didSendBodyData:(NSInteger)bytesWritten totalBytesWritten:(NSInteger)totalBytesWritten totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite {
+- (BOOL)connectionShouldUseCredentialStorage:(NSURLConnection *)connection {
+    if ([self HVD_delegateRespondsToSelector:@selector(connectionShouldUseCredentialStorage:)]) {
+        [[self HVD_delegate] connectionShouldUseCredentialStorage:connection];
+    }
+    
+    return YES;
+    
+}
 
-    if ([[self HVD_delegate] respondsToSelector:@selector(connection:didSendBodyData:totalBytesWritten:totalBytesExpectedToWrite:)]) {
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+    
+    [HVDNetworkInspector logEndDate:[NSDate date] forRequest:[self originalRequest]];
+    
+    if ([self HVD_delegateRespondsToSelector:@selector(connection:didFailWithError:)]) {
+        [[self HVD_delegate] connection:connection didFailWithError:error];
+    }
+}
+
+
+#pragma mark - NSURLConnectionDataDelegate methods
+
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+    if ([self HVD_delegateRespondsToSelector:@selector(connection:didReceiveResponse:)]) {
+        [[self HVD_delegate] connection:connection didReceiveResponse:response];
+    }
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+    if ([self HVD_delegateRespondsToSelector:@selector(connection:didReceiveData:)]) {
+        [[self HVD_delegate] connection:connection didReceiveData:data];
+    }
+}
+
+- (void)connection:(NSURLConnection *)connection didSendBodyData:(NSInteger)bytesWritten totalBytesWritten:(NSInteger)totalBytesWritten totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite {
+    if ([self HVD_delegateRespondsToSelector:@selector(connection:didSendBodyData:totalBytesWritten:totalBytesExpectedToWrite:)]) {
         [[self HVD_delegate] connection:connection didSendBodyData:bytesWritten totalBytesWritten:totalBytesWritten totalBytesExpectedToWrite:totalBytesExpectedToWrite];
     }
 }
 
-- (NSURLRequest *)HVD_connection:(NSURLConnection *)connection willSendRequest:(NSURLRequest *)request redirectResponse:(NSURLResponse *)redirectResponse {
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+    [HVDNetworkInspector logEndDate:[NSDate date] forRequest:[self originalRequest]];
+    
+    if ([self HVD_delegateRespondsToSelector:@selector(connectionDidFinishLoading:)]) {
+        [[self HVD_delegate] connectionDidFinishLoading:connection];
+    }
+}
 
-    if ([[self HVD_delegate] respondsToSelector:@selector(connection:willSendRequest:redirectResponse:)]) {
+- (NSURLRequest *)connection:(NSURLConnection *)connection willSendRequest:(NSURLRequest *)request redirectResponse:(NSURLResponse *)redirectResponse {
+    if ([self HVD_delegateRespondsToSelector:@selector(connection:willSendRequest:redirectResponse:)]) {
         return [[self HVD_delegate] connection:connection willSendRequest:request redirectResponse:redirectResponse];
     }
-
+    
     return nil;
 }
 
-- (NSInputStream *)HVD_connection:(NSURLConnection *)connection needNewBodyStream:(NSURLRequest *)request {
-    if ([[self HVD_delegate] respondsToSelector:@selector(connection:needNewBodyStream:)]) {
+- (NSInputStream *)connection:(NSURLConnection *)connection needNewBodyStream:(NSURLRequest *)request; {
+    if ([self HVD_delegateRespondsToSelector:@selector(connection:needNewBodyStream:)]) {
         return [[self HVD_delegate] connection:connection needNewBodyStream:request];
     }
-
+    
     return nil;
 }
 
-- (NSCachedURLResponse *)HVD_connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse {
-    if ([[self HVD_delegate] respondsToSelector:@selector(connection:willCacheResponse:)]) {
+- (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse {
+    if ([self HVD_delegateRespondsToSelector:@selector(connection:willCacheResponse:)]) {
         return [[self HVD_delegate] connection:connection willCacheResponse:cachedResponse];
     }
-
+    
     return nil;
 }
 
-#pragma mark - NSURLConnectionDownloadDelegate forwarded methods
+- (void)connection:(NSURLConnection *)connection didWriteData:(long long)bytesWritten totalBytesWritten:(long long)totalBytesWritten expectedTotalBytes:(long long)expectedTotalBytes {
+    if ([self HVD_delegateRespondsToSelector:@selector(connection:didWriteData:totalBytesWritten:expectedTotalBytes:)]) {
+        [[self HVD_delegate] connection:connection didWriteData:bytesWritten totalBytesWritten:totalBytesWritten expectedTotalBytes:expectedTotalBytes];
+    }
+}
 
-- (void)HVD_connectionDidResumeDownloading:(NSURLConnection *)connection totalBytesWritten:(long long)totalBytesWritten expectedTotalBytes:(long long)expectedTotalBytes {
-    if ([[self HVD_delegate] respondsToSelector:@selector(connectionDidResumeDownloading:totalBytesWritten:expectedTotalBytes:)]) {
+- (void)connectionDidResumeDownloading:(NSURLConnection *)connection totalBytesWritten:(long long)totalBytesWritten expectedTotalBytes:(long long)expectedTotalBytes {
+    if ([self HVD_delegateRespondsToSelector:@selector(connectionDidResumeDownloading:totalBytesWritten:expectedTotalBytes:)]) {
         [[self HVD_delegate] connectionDidResumeDownloading:connection totalBytesWritten:totalBytesWritten expectedTotalBytes:expectedTotalBytes];
     }
 }
 
-- (void)HVD_connection:(NSURLConnection *)connection didWriteData:(long long)bytesWritten totalBytesWritten:(long long)totalBytesWritten expectedTotalBytes:(long long)expectedTotalBytes {
-    if ([[self HVD_delegate] respondsToSelector:@selector(connection:didWriteData:totalBytesWritten:expectedTotalBytes:)]) {
-        [[self HVD_delegate] connection:connection didWriteData:bytesWritten totalBytesWritten:totalBytesWritten expectedTotalBytes:expectedTotalBytes];
+- (void)connectionDidFinishDownloading:(NSURLConnection *)connection destinationURL:(NSURL *)destinationURL {
+    [HVDNetworkInspector logEndDate:[NSDate date] forRequest:[self originalRequest]];
+    
+    if ([self HVD_delegateRespondsToSelector:@selector(connectionDidFinishDownloading:destinationURL:)]) {
+        [[self HVD_delegate] connectionDidFinishDownloading:connection destinationURL:destinationURL];
     }
 }
 

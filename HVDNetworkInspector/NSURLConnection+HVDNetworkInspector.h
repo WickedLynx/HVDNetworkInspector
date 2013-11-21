@@ -8,13 +8,23 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSURLConnection (HVDNetworkInspector)
+@interface NSURLConnection (HVDNetworkInspector) <NSURLConnectionDelegate, NSURLConnectionDataDelegate, NSURLConnectionDownloadDelegate>
+
+#pragma mark - Protocol checks
+
+- (BOOL)HVD_conformsToProtocol:(Protocol *)aProtocol;
+
+- (BOOL)HVD_respondsToSelector:(SEL)aSelector;
+
+#pragma mark - Initialisation
 
 + (NSData *)HVD_sendSynchronousRequest:(NSURLRequest *)request returningResponse:(NSURLResponse *__autoreleasing *)response error:(NSError *__autoreleasing *)error;
 
 - (id)HVD_initWithRequest:(NSURLRequest *)request delegate:(id <NSURLConnectionDelegate>)delegate;
 
 - (id)HVD_initWithRequest:(NSURLRequest *)request delegate:(id)delegate startImmediately:(BOOL)startImmediately;
+
+#pragma mark - Loading
 
 - (void)HVD_start;
 

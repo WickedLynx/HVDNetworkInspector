@@ -82,7 +82,7 @@ static HVDNetworkInspector *SharedInspector = nil;
 
     HVDNetworkConnectionLog *metric = nil;
     for (HVDNetworkConnectionLog *aMetric in _metrics) {
-        if ([[aMetric request] isEqual:request]) {
+        if ([aMetric request] == request) {
             metric = aMetric;
             break;
         }

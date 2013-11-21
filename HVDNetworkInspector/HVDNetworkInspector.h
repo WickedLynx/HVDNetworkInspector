@@ -14,8 +14,5 @@
 
 + (void)showReport;
 
-+ (void)logStartDate:(NSDate *)date forRequest:(NSURLRequest *)request;
-
-+ (void)logEndDate:(NSDate *)date forRequest:(NSURLRequest *)request;
 
 @end

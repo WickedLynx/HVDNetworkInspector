@@ -31,6 +31,7 @@
     UITableView *aTableView = [[UITableView alloc] initWithFrame:screenBounds style:UITableViewStylePlain];
     [aTableView setDataSource:self];
     [aTableView setDelegate:self];
+    [aTableView setAutoresizingMask:(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)];
     [self.view addSubview:aTableView];
 
     [self setReportTableView:aTableView];
