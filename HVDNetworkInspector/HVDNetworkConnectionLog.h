@@ -13,6 +13,13 @@ typedef NS_ENUM(NSUInteger, HVDNetworkConnectionMetricRequestType) {
     HVDNetworkConnectionMetricRequestTypePOST
 };
 
+typedef NS_ENUM(NSUInteger, HVDNetworkConnectionLogState) {
+    
+    HVDNetworkConnectionLogStateStarted = 0,
+    HVDNetworkConnectionLogStateCompleted,
+    HVDNetworkConnectionLogStateFailed
+};
+
 @interface HVDNetworkConnectionLog : NSObject
 
 + (instancetype)metricForRequest:(NSURLRequest *)request;
@@ -24,9 +31,16 @@ typedef NS_ENUM(NSUInteger, HVDNetworkConnectionMetricRequestType) {
 - (NSData *)requestBody;
 - (HVDNetworkConnectionMetricRequestType)requestType;
 - (BOOL)finishedLoading;
+- (void)setFetchedData:(NSData *)data;
+- (long long)fetchedDataLength;
+- (NSString *)fetchedDataAsUTF8String;
+- (NSString *)formattedReport;
+
 
 @property (strong, nonatomic) NSDate *startDate;
 @property (strong, nonatomic) NSDate *endDate;
+@property (strong, nonatomic) NSURLResponse *response;
+@property (nonatomic) HVDNetworkConnectionLogState state;
 
 
 

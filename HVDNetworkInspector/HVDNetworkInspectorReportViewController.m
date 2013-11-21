@@ -8,6 +8,7 @@
 
 #import "HVDNetworkInspectorReportViewController.h"
 #import "HVDNetworkConnectionLog.h"
+#import "HVDReportDetailViewController.h"
 
 @interface HVDNetworkInspectorReportViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -26,9 +27,7 @@
 
     [self setTitle:@"Network Report"];
 
-    CGRect screenBounds = [UIScreen mainScreen].bounds;
-
-    UITableView *aTableView = [[UITableView alloc] initWithFrame:screenBounds style:UITableViewStylePlain];
+    UITableView *aTableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     [aTableView setDataSource:self];
     [aTableView setDelegate:self];
     [aTableView setAutoresizingMask:(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)];
@@ -72,14 +71,43 @@
 
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:HVDNetworkInspectorReportTableCell];
-        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+        [cell setSelectionStyle:UITableViewCellSelectionStyleDefault];
     }
 
     HVDNetworkConnectionLog *metric = self.metrics[indexPath.row];
     [cell.textLabel setText:[[metric requestURL] absoluteString]];
     [cell.detailTextLabel setText:[NSString stringWithFormat:@"%f seconds", [metric loadTime]]];
+    
+    switch (metric.state) {
+        case HVDNetworkConnectionLogStateStarted:
+            [cell.textLabel setTextColor:[UIColor darkTextColor]];
+            break;
+            
+        case HVDNetworkConnectionLogStateCompleted:
+            [cell.textLabel setTextColor:[UIColor blackColor]];
+            break;
+            
+        case HVDNetworkConnectionLogStateFailed:
+            [cell.textLabel setTextColor:[UIColor redColor]];
+            break;
+            
+        default:
+            break;
+    }
 
     return cell;
+}
+
+#pragma mark - UITableViewDelegate methods
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    HVDNetworkConnectionLog *log = _metrics[indexPath.row];
+    
+    HVDReportDetailViewController *detailViewcontroller = [[HVDReportDetailViewController alloc] initWithConnectionLog:log];
+    
+    [self.navigationController pushViewController:detailViewcontroller animated:YES];
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 

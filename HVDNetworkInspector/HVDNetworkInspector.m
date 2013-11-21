@@ -26,6 +26,7 @@ static HVDNetworkInspector *SharedInspector = nil;
 
 - (HVDNetworkConnectionLog *)metricForRequest:(NSURLRequest *)request;
 - (void)showReportView;
+- (void)refreshReportView;
 
 @end
 
@@ -58,12 +59,39 @@ static HVDNetworkInspector *SharedInspector = nil;
 
 + (void)logStartDate:(NSDate *)date forRequest:(NSURLRequest *)request {
     HVDNetworkConnectionLog *metric = [[[self class] sharedInspector] metricForRequest:request];
+    
+    if (metric.requestType == HVDNetworkConnectionMetricRequestTypePOST) {
+        [metric setFetchedData:request.HTTPBody];
+    }
+    [metric setState:HVDNetworkConnectionLogStateStarted];
     [metric setStartDate:date];
+    
+    [[[self class] sharedInspector] refreshReportView];
+    
 }
 
-+ (void)logEndDate:(NSDate *)date forRequest:(NSURLRequest *)request {
++ (void)logEndDate:(NSDate *)date data:(NSData *)data forRequest:(NSURLRequest *)request {
     HVDNetworkConnectionLog *metric = [[[self class] sharedInspector] metricForRequest:request];
+    [metric setState:HVDNetworkConnectionLogStateCompleted];
     [metric setEndDate:date];
+    [metric setFetchedData:data];
+    
+    [[[self class] sharedInspector] refreshReportView];
+}
+
++ (void)logResponse:(NSURLResponse *)response forRequest:(NSURLRequest *)request {
+    HVDNetworkConnectionLog *log = [[[self class] sharedInspector] metricForRequest:request];
+    [log setResponse:response];
+    
+    [[[self class] sharedInspector] refreshReportView];
+}
+
++ (void)logFailuerForRequest:(NSURLRequest *)request {
+    HVDNetworkConnectionLog *log = [[[self class] sharedInspector] metricForRequest:request];
+    [log setState:HVDNetworkConnectionLogStateFailed];
+    [log setEndDate:[NSDate date]];
+    
+    [[[self class] sharedInspector] refreshReportView];
 }
 
 #pragma mark - Private methods
@@ -99,13 +127,26 @@ static HVDNetworkInspector *SharedInspector = nil;
     return metric;
 }
 
+- (void)refreshReportView {
+    
+    if (_reportViewController.presentingViewController != nil) {
+        [_reportViewController setMetrics:_metrics];
+        [_reportViewController refresh];
+    }
+}
+
 - (void)showReportView {
-    [_reportViewController setMetrics:_metrics];
-    [_reportViewController refresh];
+    
+    if (_reportViewController.presentingViewController == nil) {
+        
+        [_reportViewController setMetrics:_metrics];
+        [_reportViewController refresh];
+        
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:_reportViewController];
+        
+        [[[[[UIApplication sharedApplication] delegate] window] rootViewController] presentViewController:navigationController animated:YES completion:NULL];
+    }
 
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:_reportViewController];
-
-    [[[[[UIApplication sharedApplication] delegate] window] rootViewController] presentViewController:navigationController animated:YES completion:NULL];
 }
 
 + (instancetype)sharedInspector {

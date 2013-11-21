@@ -14,7 +14,12 @@
 
 + (void)logStartDate:(NSDate *)date forRequest:(NSURLRequest *)request;
 
-+ (void)logEndDate:(NSDate *)date forRequest:(NSURLRequest *)request;
++ (void)logEndDate:(NSDate *)date data:(NSData *)data forRequest:(NSURLRequest *)request;
+
++ (void)logFailuerForRequest:(NSURLRequest *)request;
+
++ (void)logResponse:(NSURLResponse *)response forRequest:(NSURLRequest *)request;
+
 
 @end
 
@@ -59,6 +64,7 @@
 
 
 char const *CNIOriginalDelegateKey = "CNIOriginalDelegateKey";
+char const *CNIDownloadedDataKey = "CNIDownloadedDataKey";
 
 @implementation NSURLConnection (HVDNetworkInspector)
 
@@ -68,8 +74,15 @@ char const *CNIOriginalDelegateKey = "CNIOriginalDelegateKey";
     [HVDNetworkInspector logStartDate:[NSDate date] forRequest:request];
 
     NSData *data = [self HVD_sendSynchronousRequest:request returningResponse:response error:error];
+    
+    [HVDNetworkInspector logResponse:*response forRequest:request];
+    
+    if (error != nil) {
+        [HVDNetworkInspector logEndDate:[NSDate date] data:data forRequest:request];
+    } else {
+        [HVDNetworkInspector logFailuerForRequest:request];
+    }
 
-    [HVDNetworkInspector logEndDate:[NSDate date] forRequest:request];
 
     return data;
 }
@@ -79,8 +92,14 @@ char const *CNIOriginalDelegateKey = "CNIOriginalDelegateKey";
     [HVDNetworkInspector logStartDate:[NSDate date] forRequest:request];
     
     [self HVD_sendAsynchronousRequest:request queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+        [HVDNetworkInspector logResponse:response forRequest:request];
         
-        [HVDNetworkInspector logEndDate:[NSDate date] forRequest:request];
+        if (error == nil) {
+            [HVDNetworkInspector logEndDate:[NSDate date] data:data forRequest:request];
+        } else {
+            [HVDNetworkInspector logFailuerForRequest:request];
+        }
+
         
         [queue addOperationWithBlock:^{
             
@@ -178,7 +197,9 @@ char const *CNIOriginalDelegateKey = "CNIOriginalDelegateKey";
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     
-    [HVDNetworkInspector logEndDate:[NSDate date] forRequest:[self originalRequest]];
+    [HVDNetworkInspector logFailuerForRequest:self.originalRequest];
+    
+    objc_setAssociatedObject(self, CNIDownloadedDataKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     
     if ([self HVD_delegateRespondsToSelector:@selector(connection:didFailWithError:)]) {
         [[self HVD_delegate] connection:connection didFailWithError:error];
@@ -190,12 +211,17 @@ char const *CNIOriginalDelegateKey = "CNIOriginalDelegateKey";
 
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+    [HVDNetworkInspector logResponse:response forRequest:[self originalRequest]];
+    objc_setAssociatedObject(self, CNIDownloadedDataKey, [NSMutableData new], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    
     if ([self HVD_delegateRespondsToSelector:@selector(connection:didReceiveResponse:)]) {
         [[self HVD_delegate] connection:connection didReceiveResponse:response];
     }
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+    NSMutableData *currentData = objc_getAssociatedObject(self, CNIDownloadedDataKey);
+    [currentData appendData:data];
     if ([self HVD_delegateRespondsToSelector:@selector(connection:didReceiveData:)]) {
         [[self HVD_delegate] connection:connection didReceiveData:data];
     }
@@ -208,7 +234,9 @@ char const *CNIOriginalDelegateKey = "CNIOriginalDelegateKey";
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    [HVDNetworkInspector logEndDate:[NSDate date] forRequest:[self originalRequest]];
+    [HVDNetworkInspector logEndDate:[NSDate date] data:(objc_getAssociatedObject(self, CNIDownloadedDataKey)) forRequest:[self originalRequest]];
+    
+    objc_setAssociatedObject(self, CNIDownloadedDataKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     
     if ([self HVD_delegateRespondsToSelector:@selector(connectionDidFinishLoading:)]) {
         [[self HVD_delegate] connectionDidFinishLoading:connection];
@@ -252,7 +280,8 @@ char const *CNIOriginalDelegateKey = "CNIOriginalDelegateKey";
 }
 
 - (void)connectionDidFinishDownloading:(NSURLConnection *)connection destinationURL:(NSURL *)destinationURL {
-    [HVDNetworkInspector logEndDate:[NSDate date] forRequest:[self originalRequest]];
+    [HVDNetworkInspector logEndDate:[NSDate date] data:(objc_getAssociatedObject(self, CNIDownloadedDataKey)) forRequest:[self originalRequest]];
+    objc_setAssociatedObject(self, CNIDownloadedDataKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     
     if ([self HVD_delegateRespondsToSelector:@selector(connectionDidFinishDownloading:destinationURL:)]) {
         [[self HVD_delegate] connectionDidFinishDownloading:connection destinationURL:destinationURL];
