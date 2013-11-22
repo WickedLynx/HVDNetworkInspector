@@ -126,10 +126,34 @@ char const *CNIDownloadedDataKey = "CNIDownloadedDataKey";
 #pragma mark Protocol checks
 
 - (BOOL)HVD_conformsToProtocol:(Protocol *)aProtocol {
+
+    Protocol *connectionDelegate = @protocol(NSURLConnectionDelegate);
+    Protocol *connectionDataDelegate = @protocol(NSURLConnectionDataDelegate);
+
+    if (protocol_isEqual(aProtocol, connectionDelegate)
+        || protocol_isEqual(aProtocol, connectionDataDelegate)) {
+
+        return YES;
+    }
+
     return [[self HVD_delegate] conformsToProtocol:aProtocol];
 }
 
 - (BOOL)HVD_respondsToSelector:(SEL)aSelector {
+
+    SEL didFailWithError = @selector(connection:didFailWithError:);
+    SEL didReceiveResponse = @selector(connection:didReceiveResponse:);
+    SEL didReceiveData = @selector(connection:didReceiveData:);
+    SEL didFinishLoading = @selector(connectionDidFinishLoading:);
+
+    if (sel_isEqual(aSelector, didFailWithError)
+        || sel_isEqual(aSelector, didReceiveResponse)
+        || sel_isEqual(aSelector, didReceiveData)
+        || sel_isEqual(aSelector, didFinishLoading)) {
+
+        return YES;
+    }
+
     return [self HVD_delegateRespondsToSelector:aSelector];
 }
 
