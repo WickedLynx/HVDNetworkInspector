@@ -102,8 +102,16 @@ long long const NetworkConnectinLogMaxDataLength = 500000;
     report = [report stringByAppendingFormat:@"Total Time: %f\t\tBytes:%lld\n\n", [self loadTime], _dataLength];
     
     report = [report stringByAppendingFormat:@"============================================\n\n"];
-    
-    report = [report stringByAppendingFormat:@"Received response:\n%@\n\n", [self.response description]];
+
+    NSString *responseDescription = @"";
+    if ([self.response isKindOfClass:[NSHTTPURLResponse class]]) {
+        NSHTTPURLResponse *response = (NSHTTPURLResponse *)self.response;
+        responseDescription = [responseDescription stringByAppendingFormat:@"Status code: %d\n", response.statusCode];
+        for (id header in [response.allHeaderFields allKeys]) {
+            responseDescription = [responseDescription stringByAppendingFormat:@"%@ = %@\n", header, [response.allHeaderFields valueForKey:header]];
+        }
+    }
+    report = [report stringByAppendingFormat:@"Received response:\n%@\n\n", responseDescription];
     
     report = [report stringByAppendingFormat:@"============================================\n\n"];
     
