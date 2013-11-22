@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FAB8233D183F1A8200E33BEB /* HVDNetworkReportDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAB8233A183F1A8200E33BEB /* HVDNetworkReportDetailViewController.m */; };
+		FAB8233E183F1A8200E33BEB /* HVDNetworkReportTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FAB8233C183F1A8200E33BEB /* HVDNetworkReportTableCell.m */; };
 		FAE75F9F183E1350003F74F7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAE75F9E183E1350003F74F7 /* Foundation.framework */; };
 		FAE75FA4183E1350003F74F7 /* HVDNetworkInspector.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAE75FA3183E1350003F74F7 /* HVDNetworkInspector.h */; };
 		FAE75FA6183E1350003F74F7 /* HVDNetworkInspector.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE75FA5183E1350003F74F7 /* HVDNetworkInspector.m */; };
@@ -46,6 +48,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		FAB82339183F1A8200E33BEB /* HVDNetworkReportDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HVDNetworkReportDetailViewController.h; sourceTree = "<group>"; };
+		FAB8233A183F1A8200E33BEB /* HVDNetworkReportDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HVDNetworkReportDetailViewController.m; sourceTree = "<group>"; };
+		FAB8233B183F1A8200E33BEB /* HVDNetworkReportTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HVDNetworkReportTableCell.h; sourceTree = "<group>"; };
+		FAB8233C183F1A8200E33BEB /* HVDNetworkReportTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HVDNetworkReportTableCell.m; sourceTree = "<group>"; };
 		FAE75F9B183E1350003F74F7 /* libHVDNetworkInspector.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libHVDNetworkInspector.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAE75F9E183E1350003F74F7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		FAE75FA2183E1350003F74F7 /* HVDNetworkInspector-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HVDNetworkInspector-Prefix.pch"; sourceTree = "<group>"; };
@@ -123,6 +129,10 @@
 		FAE75FA0183E1350003F74F7 /* HVDNetworkInspector */ = {
 			isa = PBXGroup;
 			children = (
+				FAB82339183F1A8200E33BEB /* HVDNetworkReportDetailViewController.h */,
+				FAB8233A183F1A8200E33BEB /* HVDNetworkReportDetailViewController.m */,
+				FAB8233B183F1A8200E33BEB /* HVDNetworkReportTableCell.h */,
+				FAB8233C183F1A8200E33BEB /* HVDNetworkReportTableCell.m */,
 				FAE75FC4183E13F0003F74F7 /* HVDNetworkConnectionLog.h */,
 				FAE75FC5183E13F0003F74F7 /* HVDNetworkConnectionLog.m */,
 				FAE75FC6183E13F0003F74F7 /* HVDNetworkInspectorReportViewController.h */,
@@ -247,6 +257,8 @@
 				FAE75FCD183E13F0003F74F7 /* HVDNetworkInspectorReportViewController.m in Sources */,
 				FAE75FCF183E13F0003F74F7 /* NSURLConnection+HVDNetworkInspector.m in Sources */,
 				FAE75FA6183E1350003F74F7 /* HVDNetworkInspector.m in Sources */,
+				FAB8233E183F1A8200E33BEB /* HVDNetworkReportTableCell.m in Sources */,
+				FAB8233D183F1A8200E33BEB /* HVDNetworkReportDetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
