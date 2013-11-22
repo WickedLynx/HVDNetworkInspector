@@ -60,7 +60,7 @@ static HVDNetworkInspector *SharedInspector = nil;
 + (void)logStartDate:(NSDate *)date forRequest:(NSURLRequest *)request {
     HVDNetworkConnectionLog *metric = [[[self class] sharedInspector] metricForRequest:request];
     
-    if (metric.requestType == HVDNetworkConnectionMetricRequestTypePOST) {
+    if (metric.requestType != HVDNetworkConnectionMetricRequestTypeGET) {
         [metric setFetchedData:request.HTTPBody];
     }
     [metric setState:HVDNetworkConnectionLogStateStarted];
@@ -76,14 +76,14 @@ static HVDNetworkInspector *SharedInspector = nil;
     [metric setEndDate:date];
     [metric setFetchedData:data];
     
-    [[[self class] sharedInspector] refreshReportView];
+    [[[self class] sharedInspector] reloadReport];
 }
 
 + (void)logResponse:(NSURLResponse *)response forRequest:(NSURLRequest *)request {
     HVDNetworkConnectionLog *log = [[[self class] sharedInspector] metricForRequest:request];
     [log setResponse:response];
     
-    [[[self class] sharedInspector] refreshReportView];
+    [[[self class] sharedInspector] reloadReport];
 }
 
 + (void)logFailuerForRequest:(NSURLRequest *)request {
@@ -91,7 +91,7 @@ static HVDNetworkInspector *SharedInspector = nil;
     [log setState:HVDNetworkConnectionLogStateFailed];
     [log setEndDate:[NSDate date]];
     
-    [[[self class] sharedInspector] refreshReportView];
+    [[[self class] sharedInspector] reloadReport];
 }
 
 #pragma mark - Private methods
@@ -127,25 +127,47 @@ static HVDNetworkInspector *SharedInspector = nil;
     return metric;
 }
 
+- (void)reloadReport {
+
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(refreshReportView) object:nil];
+
+    [self performSelector:@selector(refreshReportView) withObject:nil afterDelay:1.0f];
+}
+
 - (void)refreshReportView {
-    
-    if (_reportViewController.presentingViewController != nil) {
-        [_reportViewController setMetrics:_metrics];
-        [_reportViewController refresh];
-    }
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (_reportViewController.presentingViewController != nil) {
+            [_reportViewController setMetrics:_metrics];
+            [_reportViewController refresh];
+        }
+    });
+
+}
+
+- (void)clearReport {
+    [_metrics removeAllObjects];
+    [self reloadReport];
 }
 
 - (void)showReportView {
-    
-    if (_reportViewController.presentingViewController == nil) {
-        
-        [_reportViewController setMetrics:_metrics];
-        [_reportViewController refresh];
-        
-        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:_reportViewController];
-        
-        [[[[[UIApplication sharedApplication] delegate] window] rootViewController] presentViewController:navigationController animated:YES completion:NULL];
-    }
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (_reportViewController.presentingViewController == nil) {
+
+            [_reportViewController setMetrics:_metrics];
+            [_reportViewController refresh];
+
+            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:_reportViewController];
+
+            [[[[[UIApplication sharedApplication] delegate] window] rootViewController] presentViewController:navigationController animated:YES completion:^{
+
+                [_reportViewController.navigationItem.leftBarButtonItem setTarget:self];
+                [_reportViewController.navigationItem.leftBarButtonItem setAction:@selector(clearReport)];
+            }];
+        }
+    });
+
 
 }
 

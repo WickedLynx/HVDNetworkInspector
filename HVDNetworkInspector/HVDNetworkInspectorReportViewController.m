@@ -7,7 +7,8 @@
 
 #import "HVDNetworkInspectorReportViewController.h"
 #import "HVDNetworkConnectionLog.h"
-#import "HVDReportDetailViewController.h"
+#import "HVDNetworkReportDetailViewController.h"
+#import "HVDNetworkReportTableCell.h"
 
 @interface HVDNetworkInspectorReportViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -30,12 +31,17 @@
     [aTableView setDataSource:self];
     [aTableView setDelegate:self];
     [aTableView setAutoresizingMask:(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)];
+    [aTableView setRowHeight:HVDNetworkReportTableCellHeight];
+
     [self.view addSubview:aTableView];
 
     [self setReportTableView:aTableView];
 
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(touchDone)];
     [self.navigationItem setRightBarButtonItem:doneButton];
+
+    UIBarButtonItem *clearButton = [[UIBarButtonItem alloc] initWithTitle:@"Clear" style:UIBarButtonItemStylePlain target:self action:nil];
+    [self.navigationItem setLeftBarButtonItem:clearButton];
 
 }
 
@@ -66,33 +72,15 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *HVDNetworkInspectorReportTableCell = @"HVDNetworkInspectorReportTableCell";
 
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:HVDNetworkInspectorReportTableCell];
+    HVDNetworkReportTableCell *cell = [tableView dequeueReusableCellWithIdentifier:HVDNetworkInspectorReportTableCell];
 
     if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:HVDNetworkInspectorReportTableCell];
+        cell = [[HVDNetworkReportTableCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:HVDNetworkInspectorReportTableCell];
         [cell setSelectionStyle:UITableViewCellSelectionStyleDefault];
     }
 
     HVDNetworkConnectionLog *metric = self.metrics[indexPath.row];
-    [cell.textLabel setText:[[metric requestURL] absoluteString]];
-    [cell.detailTextLabel setText:[NSString stringWithFormat:@"%f seconds", [metric loadTime]]];
-    
-    switch (metric.state) {
-        case HVDNetworkConnectionLogStateStarted:
-            [cell.textLabel setTextColor:[UIColor darkTextColor]];
-            break;
-            
-        case HVDNetworkConnectionLogStateCompleted:
-            [cell.textLabel setTextColor:[UIColor blackColor]];
-            break;
-            
-        case HVDNetworkConnectionLogStateFailed:
-            [cell.textLabel setTextColor:[UIColor redColor]];
-            break;
-            
-        default:
-            break;
-    }
+    [cell setLog:metric];
 
     return cell;
 }
@@ -102,7 +90,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     HVDNetworkConnectionLog *log = _metrics[indexPath.row];
     
-    HVDReportDetailViewController *detailViewcontroller = [[HVDReportDetailViewController alloc] initWithConnectionLog:log];
+    HVDNetworkReportDetailViewController *detailViewcontroller = [[HVDNetworkReportDetailViewController alloc] initWithConnectionLog:log];
     
     [self.navigationController pushViewController:detailViewcontroller animated:YES];
     

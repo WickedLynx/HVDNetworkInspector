@@ -12,4 +12,5 @@
 @property (copy, nonatomic) NSArray *metrics;
 
 - (void)refresh;
+
 @end

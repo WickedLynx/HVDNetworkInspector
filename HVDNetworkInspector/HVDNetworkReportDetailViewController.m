@@ -5,17 +5,17 @@
 //  Copyright (c) 2013 9Slides. All rights reserved.
 //
 
-#import "HVDReportDetailViewController.h"
+#import "HVDNetworkReportDetailViewController.h"
 #import "HVDNetworkConnectionLog.h"
 
-@interface HVDReportDetailViewController () {
+@interface HVDNetworkReportDetailViewController () {
     HVDNetworkConnectionLog *_log;
     __weak UITextView *_reportTextView;
 }
 
 @end
 
-@implementation HVDReportDetailViewController
+@implementation HVDNetworkReportDetailViewController
 
 - (instancetype)initWithConnectionLog:(HVDNetworkConnectionLog *)log {
     

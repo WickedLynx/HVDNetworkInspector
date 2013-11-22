@@ -9,7 +9,7 @@
 
 @class HVDNetworkConnectionLog;
 
-@interface HVDReportDetailViewController : UIViewController
+@interface HVDNetworkReportDetailViewController : UIViewController
 
 - (instancetype)initWithConnectionLog:(HVDNetworkConnectionLog *)log;
 
