@@ -16,6 +16,7 @@ Download the source code from here. Then:
 1.	Drag _HVDNetworkInspector.xcodeproj_ into your project
 2. 	Add _HVDNetworkInspector_ as a dependancy of your target
 3.	Link your target with _libHVDNetworkInspector.a_
+4.	Add flag `-ObjC` in _Linking_ --> _Other Linker Flags_ of your target
 
 ![Setup](http://i.imgur.com/5ijIjdh.png)
 
