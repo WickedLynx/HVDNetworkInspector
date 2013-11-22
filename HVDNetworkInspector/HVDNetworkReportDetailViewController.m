@@ -36,7 +36,14 @@
     
     [self setTitle:@"Report Detail"];
     
-    UITextView *reportTextView = [[UITextView alloc] initWithFrame:self.view.bounds textContainer:nil];
+    UITextView *reportTextView = nil;
+
+    if ([[[UIDevice currentDevice] systemVersion] hasPrefix:@"6"]) {
+        reportTextView = [[UITextView alloc] initWithFrame:self.view.bounds];
+    } else {
+        reportTextView = [[UITextView alloc] initWithFrame:self.view.bounds textContainer:nil];
+    }
+
     [reportTextView setAutoresizingMask:(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)];
     [reportTextView setText:[_log formattedReport]];
     [self.view addSubview:reportTextView];
