@@ -95,21 +95,21 @@ long long const NetworkConnectinLogMaxDataLength = 500000;
     
     NSString *report = [NSString stringWithFormat:@"%@\n\n", self.request.URL.absoluteString];
     
-    report = [report stringByAppendingFormat:@"=======================================================\n\n"];
+    report = [report stringByAppendingFormat:@"============================================\n\n"];
     
     report = [report stringByAppendingFormat:@"HTTP method: %@\n", self.request.HTTPMethod];
     
     report = [report stringByAppendingFormat:@"Total Time: %f\t\tBytes:%lld\n\n", [self loadTime], _dataLength];
     
-    report = [report stringByAppendingFormat:@"=======================================================\n\n"];
+    report = [report stringByAppendingFormat:@"============================================\n\n"];
     
     report = [report stringByAppendingFormat:@"Received response:\n%@\n\n", [self.response description]];
     
-    report = [report stringByAppendingFormat:@"=======================================================\n\n"];
+    report = [report stringByAppendingFormat:@"============================================\n\n"];
     
     report = [report stringByAppendingFormat:@"Data:\n%@\n\n", [self fetchedDataAsUTF8String]];
     
-    report = [report stringByAppendingFormat:@"=======================================================\n\n"];
+    report = [report stringByAppendingFormat:@"============================================\n\n"];
     
     return report;
 }
