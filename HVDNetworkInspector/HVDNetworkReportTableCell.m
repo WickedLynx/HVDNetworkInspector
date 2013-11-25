@@ -8,7 +8,7 @@
 #import "HVDNetworkReportTableCell.h"
 #import "HVDNetworkConnectionLog.h"
 
-CGFloat const HVDNetworkReportTableCellHeight = 80.0f;
+CGFloat const HVDNetworkReportTableCellHeight = 90.0f;
 
 @implementation HVDNetworkReportTableCell {
     __weak UILabel *_topLabel;
@@ -31,8 +31,9 @@ CGFloat const HVDNetworkReportTableCellHeight = 80.0f;
         [topLabel setAutoresizingMask:(UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth)];
         _topLabel = topLabel;
 
-        UILabel *bottomLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 55, self.bounds.size.width - 10, 20)];
+        UILabel *bottomLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 55, self.bounds.size.width - 10, 35)];
         [bottomLabel setAdjustsFontSizeToFitWidth:YES];
+        [bottomLabel setNumberOfLines:2];
         [bottomLabel setFont:[UIFont systemFontOfSize:13.0f]];
         [bottomLabel setText:@""];
         [bottomLabel setTextColor:[UIColor darkGrayColor]];
@@ -47,7 +48,7 @@ CGFloat const HVDNetworkReportTableCellHeight = 80.0f;
 - (void)setLog:(HVDNetworkConnectionLog *)log {
     [_topLabel setText:[[[log request] URL] absoluteString]];
 
-    NSString *detailText = [NSString stringWithFormat:@"Time: %.4f  Type: %@  Bytes: %lld", [log loadTime], [[log request] HTTPMethod], [log fetchedDataLength]];
+    NSString *detailText = [NSString stringWithFormat:@"Time: %.4f s    Type: %@\nSent: %lld B    Received: %lld B", [log loadTime], [[log request] HTTPMethod], [log sentDataLength], [log fetchedDataLength]];
     [_bottomLabel setText:detailText];
 
     switch (log.state) {

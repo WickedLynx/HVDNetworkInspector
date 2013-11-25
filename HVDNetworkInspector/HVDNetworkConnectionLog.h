@@ -34,12 +34,14 @@ typedef NS_ENUM(NSUInteger, HVDNetworkConnectionLogState) {
 - (long long)fetchedDataLength;
 - (NSString *)fetchedDataAsUTF8String;
 - (NSString *)formattedReport;
+- (long long)sentDataLength;
 
 
 @property (strong, nonatomic) NSDate *startDate;
 @property (strong, nonatomic) NSDate *endDate;
 @property (strong, nonatomic) NSURLResponse *response;
 @property (nonatomic) HVDNetworkConnectionLogState state;
+@property (strong, nonatomic) NSError *error;
 
 
 

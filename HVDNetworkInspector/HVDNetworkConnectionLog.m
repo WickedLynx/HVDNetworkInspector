@@ -10,8 +10,11 @@
 long long const NetworkConnectinLogMaxDataLength = 500000;
 
 @interface HVDNetworkConnectionLog () {
-    long long _dataLength;
-    NSString *_dataDescription;
+    long long _receivedDataLength;
+    NSString *_receivedDataDescription;
+    long long _sentDataLength;
+    NSString *_sentDataDescription;
+    NSDictionary *_sentHeaders;
 }
 
 @property (strong, nonatomic) NSURLRequest *originalRequest;
@@ -26,6 +29,21 @@ long long const NetworkConnectinLogMaxDataLength = 500000;
     HVDNetworkConnectionLog *metric = [[[self class] alloc] init];
 
     [metric setOriginalRequest:request];
+
+    metric->_sentDataLength = request.HTTPBody.length;
+
+    if (request.HTTPBody.length > 0) {
+
+        if (request.HTTPBody.length < NetworkConnectinLogMaxDataLength) {
+            NSString *sentDataDescription = [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding];
+            metric->_sentDataDescription = sentDataDescription;
+        } else {
+            metric->_sentDataDescription = @"Data too large";
+        }
+
+    }
+
+    metric->_sentHeaders = [request allHTTPHeaderFields];
 
     return metric;
 }
@@ -53,20 +71,24 @@ long long const NetworkConnectinLogMaxDataLength = 500000;
 }
 
 - (void)setFetchedData:(NSData *)data {
-    _dataLength = [data length];
+    _receivedDataLength = [data length];
     if ([data length] > NetworkConnectinLogMaxDataLength) {
-        _dataDescription = @"----Data too large----";
+        _receivedDataDescription = @"----Data too large----";
     } else {
-        _dataDescription = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        _receivedDataDescription = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     }
 }
 
 - (long long)fetchedDataLength {
-    return _dataLength;
+    return _receivedDataLength;
+}
+
+- (long long)sentDataLength {
+    return _sentDataLength;
 }
 
 - (NSString *)fetchedDataAsUTF8String {
-    return _dataDescription;
+    return _receivedDataDescription;
 }
 
 - (NSString *)requestBodyDataAsString {
@@ -93,31 +115,57 @@ long long const NetworkConnectinLogMaxDataLength = 500000;
 
 - (NSString *)formattedReport {
     
-    NSString *report = [NSString stringWithFormat:@"%@\n\n", self.request.URL.absoluteString];
+    NSString *report = [NSString stringWithFormat:@"\n%@\n\n", self.request.URL.absoluteString];
     
-    report = [report stringByAppendingFormat:@"============================================\n\n"];
+    report = [report stringByAppendingFormat:@"==========================================\n\n"];
+
+    if (self.error != nil) {
+
+        report = [report stringByAppendingFormat:@"Error:\n\n"];
+
+        for (NSString *key in self.error.userInfo.allKeys) {
+            report = [report stringByAppendingFormat:@"%@: %@\n\n", key, [self.error.userInfo valueForKey:key]];
+        }
+
+        report = [report stringByAppendingFormat:@"==========================================\n\n"];
+
+    }
     
-    report = [report stringByAppendingFormat:@"HTTP method: %@\n", self.request.HTTPMethod];
+    report = [report stringByAppendingFormat:@"HTTP method: %@\n\n", self.request.HTTPMethod];
     
-    report = [report stringByAppendingFormat:@"Total Time: %f\t\tBytes:%lld\n\n", [self loadTime], _dataLength];
+    report = [report stringByAppendingFormat:@"Total Time: %f seconds\n\nReceived bytes: %lld\n\n", [self loadTime], _receivedDataLength];
+
+    report = [report stringByAppendingFormat:@"Sent bytes: %lld\n\n", _sentDataLength];
     
-    report = [report stringByAppendingFormat:@"============================================\n\n"];
+    report = [report stringByAppendingFormat:@"==========================================\n\n"];
+
+    report = [report stringByAppendingFormat:@"Request headers:\n\n"];
+
+    for (NSString *headerField in [_sentHeaders allKeys]) {
+        report = [report stringByAppendingFormat:@"%@: %@\n\n", headerField, [_sentHeaders valueForKey:headerField]];
+    }
+
+    report = [report stringByAppendingFormat:@"==========================================\n\n"];
+
+    report = [report stringByAppendingFormat:@"Sent Data: \n\n%@\n\n", _sentDataDescription];
+
+    report = [report stringByAppendingFormat:@"==========================================\n\n"];
 
     NSString *responseDescription = @"";
     if ([self.response isKindOfClass:[NSHTTPURLResponse class]]) {
         NSHTTPURLResponse *response = (NSHTTPURLResponse *)self.response;
-        responseDescription = [responseDescription stringByAppendingFormat:@"Status code: %d\n", response.statusCode];
+        responseDescription = [responseDescription stringByAppendingFormat:@"Status code: %ld\n\n", (long)response.statusCode];
         for (id header in [response.allHeaderFields allKeys]) {
-            responseDescription = [responseDescription stringByAppendingFormat:@"%@ = %@\n", header, [response.allHeaderFields valueForKey:header]];
+            responseDescription = [responseDescription stringByAppendingFormat:@"%@: %@\n\n", header, [response.allHeaderFields valueForKey:header]];
         }
     }
-    report = [report stringByAppendingFormat:@"Received response:\n%@\n\n", responseDescription];
+    report = [report stringByAppendingFormat:@"Received response:\n\n%@", responseDescription];
     
-    report = [report stringByAppendingFormat:@"============================================\n\n"];
+    report = [report stringByAppendingFormat:@"==========================================\n\n"];
     
-    report = [report stringByAppendingFormat:@"Data:\n%@\n\n", [self fetchedDataAsUTF8String]];
+    report = [report stringByAppendingFormat:@"Received Data:\n\n%@\n\n", [self fetchedDataAsUTF8String]];
     
-    report = [report stringByAppendingFormat:@"============================================\n\n"];
+    report = [report stringByAppendingFormat:@"==========================================\n\n"];
     
     return report;
 }

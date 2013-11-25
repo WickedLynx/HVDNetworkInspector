@@ -15,7 +15,7 @@
 
 + (void)logEndDate:(NSDate *)date data:(NSData *)data forRequest:(NSURLRequest *)request;
 
-+ (void)logFailuerForRequest:(NSURLRequest *)request;
++ (void)logFailuerForRequest:(NSURLRequest *)request error:(NSError *)error;
 
 + (void)logResponse:(NSURLResponse *)response forRequest:(NSURLRequest *)request;
 
@@ -79,7 +79,8 @@ char const *CNIDownloadedDataKey = "CNIDownloadedDataKey";
     if (error != nil) {
         [HVDNetworkInspector logEndDate:[NSDate date] data:data forRequest:request];
     } else {
-        [HVDNetworkInspector logFailuerForRequest:request];
+        NSError *theError = *error;
+        [HVDNetworkInspector logFailuerForRequest:request error:theError];
     }
 
 
@@ -96,7 +97,7 @@ char const *CNIDownloadedDataKey = "CNIDownloadedDataKey";
         if (error == nil) {
             [HVDNetworkInspector logEndDate:[NSDate date] data:data forRequest:request];
         } else {
-            [HVDNetworkInspector logFailuerForRequest:request];
+            [HVDNetworkInspector logFailuerForRequest:request error:error];
         }
 
         
@@ -140,6 +141,10 @@ char const *CNIDownloadedDataKey = "CNIDownloadedDataKey";
 }
 
 - (BOOL)HVD_respondsToSelector:(SEL)aSelector {
+
+    if (![self respondsToSelector:aSelector]) {
+        return NO;
+    }
 
     SEL didFailWithError = @selector(connection:didFailWithError:);
     SEL didReceiveResponse = @selector(connection:didReceiveResponse:);
@@ -220,7 +225,7 @@ char const *CNIDownloadedDataKey = "CNIDownloadedDataKey";
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     
-    [HVDNetworkInspector logFailuerForRequest:self.originalRequest];
+    [HVDNetworkInspector logFailuerForRequest:self.originalRequest error:error];
     
     objc_setAssociatedObject(self, CNIDownloadedDataKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     

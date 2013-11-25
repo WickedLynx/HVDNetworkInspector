@@ -60,9 +60,6 @@ static HVDNetworkInspector *SharedInspector = nil;
 + (void)logStartDate:(NSDate *)date forRequest:(NSURLRequest *)request {
     HVDNetworkConnectionLog *metric = [[[self class] sharedInspector] metricForRequest:request];
     
-    if (metric.requestType != HVDNetworkConnectionMetricRequestTypeGET) {
-        [metric setFetchedData:request.HTTPBody];
-    }
     [metric setState:HVDNetworkConnectionLogStateStarted];
     [metric setStartDate:date];
     
@@ -86,10 +83,12 @@ static HVDNetworkInspector *SharedInspector = nil;
     [[[self class] sharedInspector] reloadReport];
 }
 
-+ (void)logFailuerForRequest:(NSURLRequest *)request {
++ (void)logFailuerForRequest:(NSURLRequest *)request error:(NSError *)error {
     HVDNetworkConnectionLog *log = [[[self class] sharedInspector] metricForRequest:request];
     [log setState:HVDNetworkConnectionLogStateFailed];
     [log setEndDate:[NSDate date]];
+
+    [log setError:error];
     
     [[[self class] sharedInspector] reloadReport];
 }
