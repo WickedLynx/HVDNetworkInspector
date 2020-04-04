@@ -1,7 +1,7 @@
 HVDNetworkInspector
 ===================
 
-##What it does?
+## What it does?
 
 _HVDNetworkInspector_ keeps track of all network connections in your app and allows you to visualise them. 
 
